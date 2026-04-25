@@ -13,6 +13,13 @@ now only adds the missing MMC_QUIRK_NO_18V flag (bit 15 was reused for
 BROKEN_SD_CACHE so we use bit 19), the morse,mm610x table entries, and
 the 18V skip check in mmc_sdio_init_card().
 
+Lives in target/linux/bcm27xx/patches-6.6/ rather than generic/pending-6.6/
+because it must apply AFTER the bcm27xx donor patch
+950-0092-MMC-added-alternative-MMC-driver.patch — that patch inserts
+MMC_QUIRK_ERASE_BROKEN (1<<31) at the same point in card.h where we want
+MMC_QUIRK_NO_18V (1<<19), so our hunk's post-context needs
+MMC_QUIRK_ERASE_BROKEN to be present.
+
 --- a/drivers/mmc/core/quirks.h
 +++ b/drivers/mmc/core/quirks.h
 @@ -204,6 +204,10 @@ static const struct mmc_fixup __maybe_u
@@ -44,6 +51,6 @@ the 18V skip check in mmc_sdio_init_card().
  #define MMC_QUIRK_BROKEN_SD_POWEROFF_NOTIFY	(1<<17) /* Disable broken SD poweroff notify support */
  #define MMC_QUIRK_NO_UHS_DDR50_TUNING	(1<<18) /* Disable DDR50 tuning */
 +#define MMC_QUIRK_NO_18V		(1<<19)	/* Ignore voltage negotiation and don't use 1.8v */
-
  #define MMC_QUIRK_ERASE_BROKEN	(1<<31)		/* Skip erase */
 
+ 	bool			written_flag;
