@@ -3,29 +3,33 @@ From: James Haggerty <james.haggerty@morsemicro.com>
 Date: Fri, 28 Jun 2024 09:28:52 +1000
 Subject: [PATCH] ARM: dts: bcm2711: Add morse HAT gpios to gpio-line-names
 
+Refreshed for kernel 6.6: dts moved from arch/arm/boot/dts/ to
+arch/arm/boot/dts/broadcom/, and the upstream gpio-line-names entries
+are now generic ("GPIO2".."GPIO11") instead of the 5.15-era pin-function
+names ("SDA1"/"SCL1"/"GPIO_GCLK"/"SPI_CE1_N"). Indices unchanged: gpio 3
+is MM_WAKE, gpio 5 is MM_RESET, gpio 7 is MM_BUSY.
 ---
- arch/arm/boot/dts/bcm2711-rpi-4-b.dts | 6 +++---
+ arch/arm/boot/dts/broadcom/bcm2711-rpi-4-b.dts | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm/boot/dts/bcm2711-rpi-4-b.dts b/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
-index 8c0ab39beea1..6810ab3c3a9f 100644
---- a/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
-+++ b/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
-@@ -87,11 +87,11 @@ &gpio {
+diff --git a/arch/arm/boot/dts/broadcom/bcm2711-rpi-4-b.dts b/arch/arm/boot/dts/broadcom/bcm2711-rpi-4-b.dts
+--- a/arch/arm/boot/dts/broadcom/bcm2711-rpi-4-b.dts
++++ b/arch/arm/boot/dts/broadcom/bcm2711-rpi-4-b.dts
+@@ -310,11 +310,11 @@
  	gpio-line-names = "ID_SDA",
  			  "ID_SCL",
- 			  "SDA1",
--			  "SCL1",
+ 			  "GPIO2",
+-			  "GPIO3",
 +			  "MM_WAKE",
- 			  "GPIO_GCLK",
+ 			  "GPIO4",
 -			  "GPIO5",
 +			  "MM_RESET",
  			  "GPIO6",
--			  "SPI_CE1_N",
+-			  "GPIO7",
 +			  "MM_BUSY",
- 			  "SPI_CE0_N",
- 			  "SPI_MISO",
- 			  "SPI_MOSI",
--- 
+ 			  "GPIO8",
+ 			  "GPIO9",
+ 			  "GPIO10",
+--
 2.25.1
 
