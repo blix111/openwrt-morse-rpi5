@@ -40,9 +40,9 @@ Releases on this fork are tagged `vX.Y.Z[-alpha]` and built locally on the maint
 |---|---|---|---|
 | Seeed Studio HaLow HAT | MM6108 | SPI | **Not binding** — overlay + RP1 SPI/DMA in place, chip doesn't probe |
 | Gateworks MM8108 | MM8108 | USB | **Working** — verified 2026-04-26 |
-| Pi 5 onboard Wi-Fi | BCM43455 (Cypress) | SDIO | Driver + firmware in build |
-| Panda Wireless dongle | Ralink RT5370 | USB | Driver + firmware in build |
-| HaLow mesh / batman-adv | — | — | Packages in build |
+| Pi 5 onboard Wi-Fi | BCM43455 (Cypress) | SDIO | **Not working** — see known issues |
+| Panda Wireless dongle | Ralink RT5370 | USB | **Working** as 2.4 GHz AP — verified 2026-04-26 |
+| HaLow mesh / batman-adv | — | — | **Working** — verified 2026-04-26 with gate + point topology |
 
 When you read "the build is working" without qualification, default to MM8108/USB. The original goal — MM6108/SPI on Pi 5 — is still open.
 
