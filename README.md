@@ -36,14 +36,11 @@ sudo apt install build-essential clang flex g++ gawk gcc-multilib g++-multilib g
 
 ```
 git clone -b rpi5-mm-23.05 https://github.com/buildwithparallel/openwrt-morse-rpi5.git
+sudo chown -R $USER:$USER openwrt-morse-rpi5
 cd openwrt-morse-rpi5
 ```
 
-If your clone ended up owned by another user (e.g. you cloned to `/openwrt` from a container or with sudo), give yourself ownership before continuing:
-
-```
-sudo chown -R $USER:$USER /openwrt
-```
+The `chown` ensures every file in the cloned tree is owned by your user. OpenWrt's build system refuses to run as root and trips over root-owned files, so this avoids permission errors later.
 
 ### 3. Configure feeds and pick the board
 
@@ -73,7 +70,7 @@ When the build finishes, the image is at:
 bin/targets/bcm27xx/bcm2712/openwrt-bcm27xx-bcm2712-rpi-5-squashfs-factory.img.gz
 ```
 
-Flash with `dd` or Raspberry Pi Imager and boot the Pi 5.
+Flash to an SD card with [Raspberry Pi Imager](https://www.raspberrypi.com/software/) (choose "Use custom" and select the `.img.gz`) and boot the Pi 5.
 
 ## Upstream sources
 
