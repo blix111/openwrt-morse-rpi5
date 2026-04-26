@@ -42,21 +42,31 @@ cd openwrt-morse-rpi5
 
 The `chown` ensures every file in the cloned tree is owned by your user. OpenWrt's build system refuses to run as root and trips over root-owned files, so this avoids permission errors later.
 
-### 3. Configure feeds and pick the board
+### 3. Update and install feeds
 
 ```
-./scripts/morse_setup.sh -i -b ekh-bcm2712
+./scripts/feeds update -a
+./scripts/feeds install -a
 ```
 
-This updates and installs the Morse HaLow / OpenWrt / LuCI feeds, then assembles a `.config` for the Pi 5 target.
+This pulls the Morse HaLow, OpenWrt, and LuCI package feeds (defined in `feeds.conf.default`) and registers their packages with the build system.
 
-### 4. Download sources
+### 4. Drop in the Pi 5 config
+
+```
+cp boards/ekh-bcm2712/target_diffconfig .config
+make defconfig
+```
+
+`target_diffconfig` selects the rpi-5 device, the Morse HaLow driver/firmware/CLI, the S1G hostapd/wpa_supplicant stack, mesh, and LuCI apps. `make defconfig` expands it into a full `.config`, filling in defaults.
+
+### 5. Download sources
 
 ```
 make -j$(nproc) download
 ```
 
-### 5. Build
+### 6. Build
 
 ```
 make -j$(nproc) V=sc 2>&1 | tee log.txt
