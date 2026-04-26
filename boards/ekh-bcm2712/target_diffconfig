@@ -1,0 +1,38 @@
+CONFIG_TARGET_bcm27xx=y
+CONFIG_TARGET_bcm27xx_bcm2712=y
+CONFIG_TARGET_bcm27xx_bcm2712_DEVICE_rpi-5=y
+
+# --- Morse HaLow driver + firmware ---
+CONFIG_PACKAGE_kmod-morse=y
+CONFIG_PACKAGE_netifd-morse=y
+CONFIG_PACKAGE_morsecli=y
+CONFIG_PACKAGE_morse-fw-6108=y
+CONFIG_PACKAGE_morse-board-config=y
+CONFIG_PACKAGE_morse-regdb=y
+
+# Driver bus support: SPI for the Seeed HAT path, SDIO retained for parity with Pi4
+CONFIG_MORSE_SPI=y
+CONFIG_MORSE_SDIO=y
+
+# --- S1G/HaLow auth stack ---
+CONFIG_PACKAGE_hostapd_s1g=y
+CONFIG_PACKAGE_wpa_supplicant_s1g=y
+
+# --- 802.11s mesh ---
+CONFIG_PACKAGE_morse_mesh11sd=y
+CONFIG_PACKAGE_iw-full=y
+
+# --- Morse bundle / scripts ---
+CONFIG_PACKAGE_morse-bundle=y
+CONFIG_PACKAGE_morse-mode=y
+CONFIG_PACKAGE_wizard-config=y
+
+# --- LuCI ---
+CONFIG_PACKAGE_luci=y
+CONFIG_PACKAGE_luci-app-morseconfig=y
+CONFIG_PACKAGE_luci-app-morseapwizard=y
+CONFIG_PACKAGE_luci-app-morseguide=y
+CONFIG_PACKAGE_luci-app-morseupgrade=y
+CONFIG_PACKAGE_luci-theme-morse=y
+CONFIG_PACKAGE_luci-lib-morseui=y
+CONFIG_PACKAGE_luci-mod-home=y
