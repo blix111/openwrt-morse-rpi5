@@ -1,0 +1,145 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Pi5 Backport <noreply@example.com>
+Date: Fri, 25 Apr 2026 00:00:00 +0000
+Subject: [PATCH] bcm27xx: add Pi5 RP1 SPI overlay for MM610x and MM810x
+
+The original mm610x-spi overlay is BCM2835-only (compatible string excludes
+bcm2712, fragment@1 uses brcm,pins/brcm,function/brcm,pull which are bcm2835
+pinctrl bindings). Pi5/RP1 uses the standard pinctrl bindings on the
+rp1-pinctrl controller, and spi0 is the snps,dw-apb-ssi controller (not
+spi-bcm2835) which handles CS via cs-gpios rather than alt-function.
+
+mm610x-spi-pi5 structural notes (differs from Pi4 mm610x-spi overlay):
+- No pinctrl-0/cs-gpios on the spi0 fragment. Pi5 base DTS (bcm2712-rpi.dtsi)
+  already wires &spi0 with pinctrl-0 = <&spi0_pins &spi0_cs_pins> and
+  cs-gpios = <&gpio 8 1>, <&gpio 7 1>; re-declaring them here would either
+  shadow the working defaults or break CE-line ownership of GPIO 7 (which
+  the SEED HAT repurposes as a power-enable pin via power-gpios below).
+- spidev0/spidev1 are disabled via separate fragments targeting them by
+  label, NOT by re-declaring them inline as overlay children. Pi5 base
+  pre-populates spidev@0 and spidev@1 under spi0; an inline mm6108@0
+  child at reg=<0> would collide with the existing spidev@0 unit-address
+  and the overlay merger silently rejects the whole fragment.
+
+mm810x-spi-pi5 is currently the legacy structure (inline spidev shadows)
+and has the same overlay-collision bug as the original mm610x version did.
+It is left as-is pending bench validation of mm610x-spi-pi5; the same
+rewrite applies once that path is proven.
+
+NOTE: Pin assignments are inherited from the Pi4 mm610x overlay. The pin
+numbering on the 40-pin Pi header is preserved by RP1 (GPIO 0-27 mirror
+the BCM2835 GPIO 0-27 header pins), so the same logical pin numbers work
+on the SEED HAT.
+---
+ .../boot/dts/overlays/Makefile                   |  2 +
+ .../boot/dts/overlays/mm610x-spi-pi5-overlay.dts | 40 +++++++++++++++++++
+ .../boot/dts/overlays/mm810x-spi-pi5-overlay.dts | 39 +++++++++++++++++++
+ 3 files changed, 81 insertions(+)
+ create mode 100644 arch/arm/boot/dts/overlays/mm610x-spi-pi5-overlay.dts
+ create mode 100644 arch/arm/boot/dts/overlays/mm810x-spi-pi5-overlay.dts
+
+--- a/arch/arm/boot/dts/overlays/Makefile
++++ b/arch/arm/boot/dts/overlays/Makefile
+@@ -188,7 +188,9 @@ dtbo-$(CONFIG_ARCH_BCM2835) += \
+ 	mm_wlan.dtbo \
+ 	mmc.dtbo \
+ 	morse-ps.dtbo \
+ 	mm610x-spi.dtbo \
++	mm610x-spi-pi5.dtbo \
+ 	mm810x-spi.dtbo \
++	mm810x-spi-pi5.dtbo \
+ 	mz61581.dtbo \
+ 	ov2311.dtbo \
+ 	ov5647.dtbo \
+--- /dev/null
++++ b/arch/arm/boot/dts/overlays/mm610x-spi-pi5-overlay.dts
+@@ -0,0 +1,47 @@
++/dts-v1/;
++/plugin/;
++
++/ {
++	compatible = "brcm,bcm2712";
++
++	fragment@0 {
++		target = <&spi0>;
++		frag0: __overlay__ {
++			status = "okay";
++			#address-cells = <1>;
++			#size-cells = <0>;
++			/* Override base DTS: GPIO 7 is repurposed as MM6108 power-enable
++			 * (see power-gpios below), so it must NOT be claimed as CS1.
++			 * Drop &spi0_cs_pins from pinctrl-0 to keep GPIO 7/8 in
++			 * generic input mode; cs-gpios drives GPIO 8 directly. */
++			pinctrl-0 = <&spi0_pins>;
++			pinctrl-names = "default";
++			cs-gpios = <&gpio 8 1>;
++
++			mm6108: mm6108@0 {
++				compatible = "morse,mm610x-spi";
++				reg = <0>;	/* CE0 */
++				reset-gpios = <&gpio 5 0>;
++				power-gpios = <&gpio 3 0>,
++				              <&gpio 7 0>;
++				spi-irq-gpios = <&gpio 25 0>;
++				spi-max-frequency = <50000000>;
++				status = "okay";
++			};
++		};
++	};
++
++	fragment@1 {
++		target = <&spidev0>;
++		__overlay__ {
++			status = "disabled";
++		};
++	};
++
++	fragment@2 {
++		target = <&spidev1>;
++		__overlay__ {
++			status = "disabled";
++		};
++	};
++};
+--- /dev/null
++++ b/arch/arm/boot/dts/overlays/mm810x-spi-pi5-overlay.dts
+@@ -0,0 +1,39 @@
++/dts-v1/;
++/plugin/;
++
++/ {
++	compatible = "brcm,bcm2712";
++
++	fragment@0 {
++		target = <&spi0>;
++		frag0: __overlay__ {
++			pinctrl-names = "default";
++			pinctrl-0 = <&spi0_pins>;
++			cs-gpios = <&gpio 8 1>;	/* CE0 active low; CS driven by SW */
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "okay";
++
++			mm8108: mm8108@0 {
++				compatible = "morse,mm810x-spi";
++				reg = <0>;	/* CE0 */
++				reset-gpios = <&gpio 5 0>;
++				power-gpios = <&gpio 3 0>,
++				              <&gpio 7 0>;
++				spi-irq-gpios = <&gpio 25 0>;
++				spi-max-frequency = <50000000>;
++				status = "okay";
++			};
++
++			spidev0: spidev@0 {
++				reg = <0>;	/* CE0 */
++				status = "disabled";
++			};
++
++			spidev1: spidev@1 {
++				reg = <1>;	/* CE1 */
++				status = "disabled";
++			};
++		};
++	};
++};

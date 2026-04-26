@@ -1,0 +1,28 @@
+From: morse-backport <local@morse-backport>
+Subject: dts: rp1: Enable rp1_dma so dw-spi can use DMA
+
+The RP1 SPI controllers (snps,dw-apb-ssi) reference &rp1_dma in their
+dmas property, but the rp1_dma node ships with status="disabled" in
+upstream rp1.dtsi. This forces dw-spi into PIO mode for all RP1 SPI
+transfers, which has FIFO/timing issues with chained SDIO-over-SPI
+half-duplex transactions (e.g. Morse Micro MM6108 cmd53 reads).
+
+Set rp1_dma status="okay". The DW_AXI_DMAC driver (CONFIG_DW_AXI_DMAC=y)
+matches the snps,axi-dma-1.01a compatible and binds the controller.
+SPI_DW_DMA=y enables the DMA path in spi-dw-core.
+
+---
+ arch/arm64/boot/dts/broadcom/rp1.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/arch/arm64/boot/dts/broadcom/rp1.dtsi
++++ b/arch/arm64/boot/dts/broadcom/rp1.dtsi
+@@ -1092,7 +1092,7 @@
+ 			snps,block-size = <0x40000 0x40000 0x40000 0x40000 0x40000 0x40000 0x40000 0x40000>;
+ 			snps,priority = <0 1 2 3 4 5 6 7>;
+ 			snps,axi-max-burst-len = <4>;
+-			status = "disabled";
++			status = "okay";
+ 		};
+
+ 		rp1_usb0: usb@200000 {

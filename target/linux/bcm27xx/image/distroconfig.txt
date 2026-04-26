@@ -14,3 +14,6 @@ dtoverlay=disable-bt
 dtoverlay=disable-bt
 # Run as fast as firmware / board allows
 arm_boost=1
+[pi5]
+# Morse Micro MM6108 (SEED HaLow HAT) on RP1 SPI0
+dtoverlay=mm610x-spi-pi5
