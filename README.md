@@ -12,12 +12,23 @@ This repo is a community backport. The [Morse Micro OpenWrt SDK](https://github.
 
 ## Supported Hardware
 
+### HaLow radios
+
 | Device                          | Chip   | Interface         | Status                     |
 |---------------------------------|--------|-------------------|----------------------------|
 | Seeed Studio HaLow HAT          | MM6108 | SPI               | Does not bind yet          |
 | Gateworks MM8108                | MM8108 | USB (HAT-to-Pi)   | Working                    |
 
 The original goal is the Seeed Studio HaLow HAT on Pi 5 over SPI — that path is still open. The DesignWare SPI / RP1 DMA / Morse SPI overlay are in place but the MM6108 chip isn't binding yet on Pi 5. As a working alternative, the MM8108 currently runs on Pi 5 via a USB cable from the HaLow board to the Pi.
+
+### Regular Wi-Fi
+
+| Device                          | Chip          | Interface | Status         |
+|---------------------------------|---------------|-----------|----------------|
+| Pi 5 onboard Wi-Fi              | BCM43455      | SDIO      | Included       |
+| Panda Wireless USB dongle       | Ralink RT5370 | USB       | Included       |
+
+Drivers and firmware for both are in the build (`kmod-brcmfmac` + `cypress-firmware-43455-sdio` for onboard, `kmod-rt2800-usb` for the dongle). Configure them at runtime via LuCI or `/etc/config/wireless`.
 
 ## Building
 

@@ -14,6 +14,21 @@ CONFIG_PACKAGE_morse-regdb=y
 CONFIG_MORSE_SPI=y
 CONFIG_MORSE_SDIO=y
 
+# --- Pi 5 onboard 2.4/5 GHz Wi-Fi (BCM43455 via brcmfmac/SDIO) ---
+# These are pulled in automatically by Device/rpi-5 DEVICE_PACKAGES, but
+# selecting them explicitly here makes the dependency on regular Wi-Fi obvious
+# in the diffconfig and survives any future Device/rpi-5 changes.
+CONFIG_PACKAGE_kmod-brcmfmac=y
+CONFIG_PACKAGE_cypress-firmware-43455-sdio=y
+CONFIG_PACKAGE_brcmfmac-nvram-43455-sdio=y
+CONFIG_PACKAGE_wpad-basic-mbedtls=y
+
+# --- Panda Wireless / Ralink RT5370 USB dongle (rt2800usb) ---
+CONFIG_PACKAGE_kmod-rt2800-usb=y
+
+# --- mDNS responder (required by the Morse LuCI wizard for device discovery) ---
+CONFIG_PACKAGE_umdns=y
+
 # --- S1G/HaLow auth stack ---
 CONFIG_PACKAGE_hostapd_s1g=y
 CONFIG_PACKAGE_wpa_supplicant_s1g=y
