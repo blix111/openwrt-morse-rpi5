@@ -30,6 +30,24 @@ The original goal is the Seeed Studio HaLow HAT on Pi 5 over SPI — that path i
 
 Drivers and firmware for both are in the build (`kmod-brcmfmac` + `cypress-firmware-43455-sdio` for onboard, `kmod-rt2800-usb` for the dongle). Configure them at runtime via LuCI or `/etc/config/wireless`.
 
+## Included Add-Ons
+
+Beyond the base Morse HaLow stack, this build ships a curated set of extras ready to use out of the box:
+
+- **Mesh networking** — `batman-adv` + `batctl` Layer-2 mesh with LuCI integration, plus `mesh11sd` for 802.11s
+- **VPN** — WireGuard (kernel module + LuCI proto) and Tailscale client/daemon (compatible with Headscale for off-grid use)
+- **ADS-B aircraft tracking** — RTL-SDR library, `dump1090` decoder, and Python 3 with `cryptography` for `adsbcot` (Cursor-on-Target feed)
+- **LoRa / Reticulum sidecar** — Python 3 with `pyserial` and `netifaces`; USB-ACM and USB-serial drivers for:
+  - Heltec V1 (nRF52) / V4 (ESP32-S3)
+  - RAK4631 (nRF52840)
+  - Seeed Xiao ESP32-S3
+  - Walter (ESP32-S3)
+  - Muzi Works Base Duo
+  - Null Hop Mesh Toad (CH341)
+- **Network debugging** — `tcpdump`, `iperf3`, `mtr`, `nmap`, full `iw`, `lsusb`
+- **Web UI** — LuCI with Morse Argon theme, first-boot setup wizard, WireGuard and batman-adv config UIs
+- **General utilities** — Bash, `curl` (TLS + CA bundle), `nano`, `htop`, `screen`, mDNS (`umdns`)
+
 ## Building
 
 Tested on Ubuntu 22.04 / 24.04.
