@@ -4,6 +4,8 @@ OpenWrt-based Morse Micro HaLow firmware targeting the Raspberry Pi 5. Brings su
 
 This repo is a community backport. The [Morse Micro OpenWrt SDK](https://github.com/MorseMicro/openwrt) ships on OpenWrt 23.05 (kernel 5.15) and supports Pi 4. The bcm2712/RP1 hardware definitions from upstream OpenWrt 24.10 (kernel 6.6) have been vendored back so the same Morse SDK can build for Pi 5.
 
+> **Note:** This repo exists as a bridge. When Morse Micro releases their OpenWrt 24.x SDK — which is expected to include native Raspberry Pi 5 support — this repo will likely be superseded by the official upstream fork. Until that happens, this backport is the way to get HaLow running on Pi 5.
+
 **Software Specifications**
 - Morse Micro OpenWrt SDK, 23.05.5 base
 - Linux kernel 6.6 (vendored from openwrt-24.10)
