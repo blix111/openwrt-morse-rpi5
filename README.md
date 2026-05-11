@@ -113,6 +113,21 @@ bin/targets/bcm27xx/bcm2712/openwrt-bcm27xx-bcm2712-rpi-5-squashfs-factory.img.g
 
 Flash to an SD card with [Raspberry Pi Imager](https://www.raspberrypi.com/software/) (choose "Use custom" and select the `.img.gz`) and boot the Pi 5.
 
+## Setting the Region
+
+On first boot, the Morse Micro LuCI setup wizard prompts you to select your country/region. This sets the regulatory domain for both HaLow (S1G) and standard Wi-Fi, controlling available channels, TX power limits, and bandwidth options. S1G channel plans vary significantly by region (US, AU, and EU each use completely different frequency allocations), so getting this right matters.
+
+To change the region after initial setup:
+
+**LuCI web UI:** Network > Wireless > edit the radio > country code dropdown
+
+**CLI:**
+```sh
+uci set wireless.radio0.country='US'
+uci commit wireless
+wifi reload
+```
+
 ## Upstream sources
 
 - Morse Micro OpenWrt SDK: https://github.com/MorseMicro/openwrt (23.05.5 base, branch `mm/v23.05.5`)
