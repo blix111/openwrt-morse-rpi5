@@ -1,8 +1,14 @@
 # OpenWrt Morse HaLow Firmware for Raspberry Pi 5
 
+![Haven Pi 5 — Raspberry Pi 5 with Morse Micro HaLow radio, UPS HAT, and battery stack](docs/haven-pi5.png)
+
 OpenWrt-based Morse Micro HaLow firmware targeting the Raspberry Pi 5. Brings sub-GHz long-range 802.11ah (HaLow) Wi-Fi to the Pi 5 via Morse Micro radios.
 
 This repo is a community backport. The [Morse Micro OpenWrt SDK](https://github.com/MorseMicro/openwrt) ships on OpenWrt 23.05 (kernel 5.15) and supports Pi 4. The bcm2712/RP1 hardware definitions from upstream OpenWrt 24.10 (kernel 6.6) have been vendored back so the same Morse SDK can build for Pi 5.
+
+> **Just want to flash?** Download the pre-built Raspberry Pi 5 image from the [Releases](../../releases) section — no build required.
+
+> **Field notes & test results:** The [Haven Guide](https://buildwithparallel.com/products/haven) has real-world range tests, hardware setup notes, and deployment tips from building with this firmware. Not required to build or flash — just useful if you want to go deeper.
 
 > **Note:** This repo exists as a bridge. When Morse Micro releases their OpenWrt 24.x SDK — which is expected to include native Raspberry Pi 5 support — this repo will likely be superseded by the official upstream fork. Until that happens, this backport is the way to get HaLow running on Pi 5.
 
