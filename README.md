@@ -125,7 +125,15 @@ On first boot, the Morse Micro LuCI setup wizard prompts you to select your coun
 
 To change the region after initial setup:
 
-**LuCI web UI:** Network > Wireless > edit the radio > country code dropdown
+**LuCI web UI:**
+
+1. Go to **Network → Wireless**
+2. For **each radio** (HaLow, onboard Wi-Fi, USB dongle, etc.), click **Edit**
+3. Confirm the **Country Code** is set correctly (e.g. **United States**)
+4. Click **Save** on that radio
+5. Back on the Wireless overview page, click **Save & Apply**
+
+That last step matters — editing each radio and saving individually is not enough; you must **Save & Apply** on the main Wireless page for the regulatory domain to take effect.
 
 **CLI:**
 ```sh
