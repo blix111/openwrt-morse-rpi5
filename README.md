@@ -1,5 +1,11 @@
 # OpenWrt Morse HaLow Firmware for Raspberry Pi 5
 
+[![OpenWrt 23.05](https://img.shields.io/badge/OpenWrt-23.05-blue)](https://github.com/MorseMicro/openwrt)
+[![Kernel 6.6](https://img.shields.io/badge/Linux%20kernel-6.6-lightgrey)](https://github.com/openwrt/openwrt)
+[![Raspberry Pi 5](https://img.shields.io/badge/Raspberry%20Pi-5-c51a4a)](https://www.raspberrypi.com/products/raspberry-pi-5/)
+[![Morse Micro HaLow](https://img.shields.io/badge/Morse%20Micro-HaLow-6f42c1)](https://www.morsemicro.com/)
+[![Build walkthrough](https://img.shields.io/badge/YouTube-build%20walkthrough-red)](https://youtu.be/FXwOeNuFPWs)
+
 ![Haven Pi 5 — Raspberry Pi 5 with Morse Micro HaLow radio, UPS HAT, and battery stack](docs/haven-pi5.png)
 
 OpenWrt-based Morse Micro HaLow firmware targeting the Raspberry Pi 5. Brings sub-GHz long-range 802.11ah (HaLow) Wi-Fi to the Pi 5 via Morse Micro radios.
@@ -17,6 +23,22 @@ This repo is a community backport. The [Morse Micro OpenWrt SDK](https://github.
 - Linux kernel 6.6 (vendored from openwrt-24.10)
 - mac80211 backports 6.12.61
 - Morse Micro driver 1.16.4
+
+## About
+
+This firmware is part of [Build with Parallel](https://buildwithparallel.com/), a project focused on practical off-grid communications, resilient mesh networking, and field-ready Raspberry Pi builds.
+
+## Project Links
+
+| Link | What it is |
+|---|---|
+| [Releases](../../releases) | Pre-built Raspberry Pi 5 firmware images |
+| [Build walkthrough video](https://youtu.be/FXwOeNuFPWs) | End-to-end source build, customization, and SD-card flashing |
+| [Haven Guide](https://buildwithparallel.com/products/haven) | Field notes, hardware setup, range tests, and deployment notes |
+| [Haven mesh setup scripts](https://github.com/buildwithparallel/haven-manet-ip-mesh-radio) | Gate/point node setup scripts for the wider Haven mesh topology |
+| [Build with Parallel](https://buildwithparallel.com) | Project site and broader Haven updates |
+| [Data Slayer on YouTube](https://www.youtube.com/@DataSlayerMedia) | Build videos, demos, and field updates |
+| [Data Slayer on X](https://x.com/data_slayer) | Short-form updates and project notes |
 
 ## Supported Hardware
 
@@ -59,6 +81,8 @@ Beyond the base Morse HaLow stack, this build ships a curated set of extras read
 ## Building
 
 Tested on Ubuntu 22.04 / 24.04.
+
+For a visual walkthrough of the full process, including building the OpenWrt Morse Micro firmware from source, applying customization, and flashing the resulting image to an SD card, see the [build and flash video](https://youtu.be/FXwOeNuFPWs).
 
 ### 1. Install build dependencies
 
