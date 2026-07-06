@@ -1,0 +1,57 @@
+name: Build OpenWrt Image
+
+permissions:
+  contents: write
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y build-essential clang flex g++ gawk gcc-multilib g++-multilib git gettext \
+            libncurses5-dev libssl-dev python3-setuptools rsync unzip zlib1g-dev swig file wget \
+            libnl-3-dev libnl-genl-3-dev pkg-config
+
+      - name: Update and install feeds
+        run: |
+          ./scripts/feeds update -a
+          ./scripts/feeds install -a
+
+      - name: Configure board config
+        run: |
+          cp boards/ekh-bcm2712/target_diffconfig .config
+          make defconfig
+
+      - name: Download package sources
+        run: |
+          make -j$(nproc) download
+
+      - name: Compile OpenWrt firmware
+        run: |
+          make -j$(nproc) V=s
+
+      - name: Organize output files
+        run: |
+          mkdir -p publish
+          find bin/targets/bcm27xx/bcm2712/ -type f -name "*factory.img.gz" -exec cp {} publish/ \;
+
+      - name: Upload firmware to GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: publish/*
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
