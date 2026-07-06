@@ -29,6 +29,16 @@ jobs:
           ./scripts/feeds update -a
           ./scripts/feeds install -a
 
+      - name: Patch morse_driver compiler flags to ignore warnings-as-errors
+        run: |
+          if [ -f feeds/morse/essentials/morse_driver/Makefile ]; then
+            sed -i 's/NOSTDINC_FLAGS = \\/NOSTDINC_FLAGS = -Wno-error=cpp -Wno-error \\/g' feeds/morse/essentials/morse_driver/Makefile
+            echo "Successfully patched morse_driver Makefile"
+          else
+            echo "Error: morse_driver Makefile not found!"
+            exit 1
+          fi
+
       - name: Configure board config
         run: |
           cp boards/ekh-bcm2712/target_diffconfig .config
