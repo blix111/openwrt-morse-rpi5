@@ -8,6 +8,11 @@ on:
     tags:
       - "v*"
   workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag name for the release (if empty, release upload is skipped and only artifact is uploaded)'
+        required: false
+        default: ''
 
 jobs:
   build:
@@ -57,9 +62,17 @@ jobs:
           mkdir -p publish
           find bin/targets/bcm27xx/bcm2712/ -type f -name "*factory.img.gz" -exec cp {} publish/ \;
 
+      - name: Upload firmware as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: openwrt-morse-rpi5-factory-image
+          path: publish/*
+
       - name: Upload firmware to GitHub Release
+        if: github.ref_type == 'tag' || (github.event_name == 'workflow_dispatch' && inputs.tag_name != '')
         uses: softprops/action-gh-release@v1
         with:
+          tag_name: ${{ github.ref_type == 'tag' && github.ref_name || inputs.tag_name }}
           files: publish/*
           draft: false
           prerelease: false
