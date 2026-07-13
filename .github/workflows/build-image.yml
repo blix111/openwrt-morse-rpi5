@@ -43,6 +43,9 @@ jobs:
             echo "Error: morse_driver Makefile not found!"
             exit 1
           fi
+          # Remove duplicate patch that is already merged in 1.17.8+
+          rm -f feeds/morse/essentials/morse_driver/patches/018-fix-mesh-conection-failure-on-overlapped-channels.patch
+          echo "Removed duplicate mesh connection patch"
 
       - name: Configure board config
         run: |
