@@ -46,6 +46,10 @@ jobs:
           # Remove duplicate patch that is already merged in 1.17.8+
           rm -f feeds/morse/essentials/morse_driver/patches/018-fix-mesh-conection-failure-on-overlapped-channels.patch
           echo "Removed duplicate mesh connection patch"
+          # Remove conflicting packages from prpl feed to break the recursive dependency loop
+          rm -rf feeds/prpl/network/plugins/tr181-firewall
+          rm -rf feeds/prpl/backports/packages_22.03/miniupnpd-prpl
+          echo "Removed conflicting prpl feed packages"
 
       - name: Configure board config
         run: |
